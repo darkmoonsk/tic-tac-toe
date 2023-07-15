@@ -169,6 +169,7 @@ class TicTacToeDOM {
 
     initiliaze(game) {
         this.game = game;
+        this.#createBoard();
         this.#makeBoardPlayable();
     }
 
@@ -199,6 +200,30 @@ class TicTacToeDOM {
         }
     }
 
+    #createBoard() {
+        const size = this.game.boardSize;
+        const positions = [];
+        for (let line = 1; line <= size; line++) {
+            for (let column = 1; column <= size; column++) {
+                let classes = "position ";
+                if (line === 1) {
+                    classes += "position-top ";
+                } else if (line === size) {
+                    classes += "position-bottom ";
+                }
+
+                if (column === 1) {
+                    classes += "position-left ";
+                } else if (column === size) {
+                    classes += "position-right ";
+                }
+                positions.push(`<div class="${classes}" line="${line}" column="${column}"></div>`);
+            }
+        }
+        this.board.innerHTML = [...positions].join("");
+        this.board.style.gridTemplateColumns = `repeat(${size}, 1fr)`
+    }
+
     reset() {
         this.game.reset();
         const positions = document.querySelectorAll(".position");
@@ -211,12 +236,24 @@ class TicTacToeDOM {
     const btnStart = document.querySelector("#start");
     const infos = document.querySelector("#infos");
     const board = document.querySelector("#board");
-
-    const game = new TicTacToe(3, new Player("X"), new PlayerAI("O"));
+    const inputBoardSize = document.querySelector("#board-size");
+    
+    
     const gameDOM = new TicTacToeDOM(board, infos);
+    
+    function newGame(boardSize) {
+        const game = new TicTacToe(boardSize, new Player("X"), new PlayerAI("O"));
+        return game;
+    }
+
     btnStart.addEventListener("click", () => {
         gameDOM.reset();
     });
 
-    gameDOM.initiliaze(game);
+    inputBoardSize.addEventListener("input", () => {
+        let boardSize = +inputBoardSize.value;
+        gameDOM.initiliaze(newGame(boardSize));
+    })
+
+    gameDOM.initiliaze(newGame());
 })();

@@ -35,9 +35,13 @@ button:hover {
 
 #board {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    /* grid-template-columns: repeat(3, 1fr); */
     width: min-content;
     padding-top: 25px;
+}
+
+#board-size {
+    width: 50px;
 }
 
 .position {
